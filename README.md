@@ -11,5 +11,5 @@ The result of the sketch.py shows that only a few of the initial graph nodes can
 
 * pset4/
 
-An experimenting assignment, in which two sketch algorithms are compared on the accuracy.
+An experimenting assignment, in which two sketch algorithms are compared on the accuracy. For detail please refer to the experimenting report.
 For more detailed information, see [Problem Set 4](http://www.comp.nus.edu.sg/~gilbert/CS5234/2016/psets/pset4.pdf)  
