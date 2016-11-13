@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
 			//score /= tmp.length();
 			linear += score;
 			square += score * score;
-			printf("%d\n", score);
+			//printf("%d\n", score);
 
 			//dict.insert(tmp);
 
@@ -205,12 +205,12 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	/*double expect = (double)linear / constant;
+	double expect = (double)linear / constant;
 	double pop = (double)square / constant - expect * expect;
 	double length = (double)allwords / period;
 	double result = ret / MAX_H / 50.0 + pop * 5.0 + length * 1.0;
 	printf("amount = %f, popularity = %f, length = %f\n", ret / MAX_H / 50.0, pop * 5.0, length);
-	printf("%f\n", result);*/
+	printf("%f\n", result);
 
 	return 0;
 }

@@ -1,0 +1,110 @@
+level1:
+amount = 11.705249, popularity = 3.295014, length = 8.435374
+23.435636
+amount = 12.344926, popularity = 3.747366, length = 10.113464
+26.205756
+amount = 12.274263, popularity = 3.911143, length = 10.003552
+26.188959
+amount = 10.256958, popularity = 3.585317, length = 10.666012
+24.508287
+amount = 8.158586, popularity = 3.525722, length = 11.294537
+22.978845
+amount = 13.103040, popularity = 3.894897, length = 10.660410
+27.658346
+amount = 11.539793, popularity = 3.503690, length = 10.944030
+25.987512
+amount = 10.202662, popularity = 3.692975, length = 8.546713
+22.442350
+
+level2:
+amount = 15.914208, popularity = 3.536489, length = 12.817822
+32.268519
+amount = 16.272043, popularity = 3.719548, length = 13.251082
+33.242673
+amount = 13.674726, popularity = 3.752944, length = 9.161235
+26.588906
+amount = 16.272043, popularity = 3.719548, length = 13.251082
+33.242673
+amount = 16.431658, popularity = 3.141318, length = 14.232662
+33.805639
+amount = 16.048067, popularity = 3.377590, length = 13.804781
+33.230438
+amount = 17.928932, popularity = 3.698015, length = 10.252475
+31.879422
+amount = 20.745744, popularity = 4.004288, length = 11.884518
+36.634549
+
+level3:
+amount = 25.634232, popularity = 3.814812, length = 15.675477
+45.124521
+amount = 28.723117, popularity = 3.890093, length = 13.784135
+46.397346
+amount = 26.542869, popularity = 3.871726, length = 11.389509
+41.804103
+amount = 21.298258, popularity = 4.090987, length = 13.125846
+38.515091
+amount = 25.793834, popularity = 4.171185, length = 15.912718
+45.877738
+amount = 25.827163, popularity = 3.844202, length = 15.618182
+45.289547
+amount = 24.860039, popularity = 3.775125, length = 11.537297
+40.172462
+amount = 24.670362, popularity = 3.502680, length = 14.126582
+42.299625
+amount = 19.771186, popularity = 4.118497, length = 11.065748
+34.955431
+amount = 21.182305, popularity = 3.984428, length = 13.026253
+38.192986
+amount = 22.495933, popularity = 3.812533, length = 12.258850
+38.567315
+amount = 18.100727, popularity = 4.017061, length = 9.348361
+31.466149
+amount = 26.515828, popularity = 3.533199, length = 15.016497
+45.065525
+amount = 24.267880, popularity = 4.619095, length = 12.040346
+40.927321
+
+level4:
+amount = 26.731124, popularity = 3.788110, length = 13.376106
+43.895340
+amount = 29.906412, popularity = 3.473003, length = 15.448680
+48.828095
+amount = 41.475871, popularity = 5.144413, length = 12.011976
+58.632259
+amount = 36.243151, popularity = 4.676822, length = 17.118291
+58.038264
+amount = 26.766835, popularity = 3.990677, length = 13.297158
+44.054670
+amount = 31.596811, popularity = 3.776146, length = 15.990512
+51.363469
+amount = 30.827849, popularity = 4.101385, length = 12.615087
+47.544320
+amount = 32.634711, popularity = 4.157892, length = 12.666187
+49.458790
+amount = 31.835301, popularity = 3.864642, length = 15.942631
+51.642574
+amount = 32.549564, popularity = 3.515411, length = 12.625780
+48.690755
+amount = 29.045687, popularity = 3.708758, length = 14.474954
+47.229399
+
+level5:
+amount = 38.989503, popularity = 4.520765, length = 18.022647
+61.532915
+amount = 42.551225, popularity = 4.125688, length = 14.900527
+61.577440
+amount = 41.838862, popularity = 4.254788, length = 15.028537
+61.122187
+amount = 41.387627, popularity = 4.356642, length = 15.425532
+61.169801
+
+level6:
+amount = 51.231328, popularity = 4.451348, length = 15.472999
+71.155675
+amount = 45.096963, popularity = 4.204704, length = 14.610240
+63.911908
+amount = 49.927703, popularity = 5.664018, length = 19.251918
+74.843639
+amount = 52.898960, popularity = 4.243473, length = 13.898396
+71.040828
+
