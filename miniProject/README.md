@@ -51,10 +51,6 @@ After a while, the result of 49 books will be shown in file "stat"
 Since the Gutenberg dats set is too large, we didn't upload it here so here
 not include the running instruction on Gutenberg data set.
 
-```console
-$ ./run.out > output.txt
-```
-
 ### Team member
 * Yang Siyi
 * Liu Zhendong - Tony
