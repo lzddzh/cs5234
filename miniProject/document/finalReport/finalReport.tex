@@ -28,6 +28,7 @@
 \usepackage{float} % fix the picture position
 \usepackage{amsmath} % Required for some math elements 
 \usepackage{amsfonts}
+\usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage[a4paper,bindingoffset=0.2in,%
             left=1in,right=1in,top=1in,bottom=1in,%
@@ -43,7 +44,7 @@
 %	DOCUMENT INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title{Streaming Methods to Evaluate Books' Readability Level} % Title
+\title{Streaming Methods to Evaluate Books' Readability} % Title
 
 \author{\textsc{Siyi Yang} A0151298Y\quad \textsc{Zhendong Liu} A0159369L} % Author name
 
@@ -59,7 +60,7 @@
 Before we read a book, we may want to know the readability of the book. Easy reading helps learning and enjoyment\cite{fry}, and for educational purpose we also want to give the readability level to reading books so that students can choose the best fit ones to read. 
 \newline
 \newline
-Our goal in this project is to use streaming methods to give a precise enough readability level of a given text book. By streaming method, we achieved less time and space to evaluate the readability of a book. In the streaming method, We designed a score system to give readability score to books so we only update the score as the stream goes. In this project, we test 49 world classic literature books with our algorithms to see the accuracy of our algorithm, and tested another 1255 books to see the time and space cost of our algorithm.
+Our goal in this project is to use streaming methods to give a precise enough readability level of a given text book. By streaming method, we achieved less time and space to evaluate the readability of a book. In the streaming method, We designed a score system to give readability score to books so we only update the score as the stream goes. In this project, we test 49 world classic literature books with our algorithms to see the accuracy of our algorithm, and tested another 1254 books to see the time and space cost of our algorithm.
 \newline
 \newline
 We have compared our algorithm with traditional non-streaming implementation. The result shows our algorithm dramatically reduce the space cost on the large data set. And also spend less time. At the same time, our algorithm still maintains the good estimation accuracy. For detailed information of the improvement please refer to section 6.
@@ -72,7 +73,7 @@ We run our code on a Mac laptop with the specification below:
 \item \textbf{Compiler}: Clang 800.0.42.1 (with -O2 option on)
 \end{itemize}
 \subsection{Source Code}
-The source code is on Github:\\\url{https://github.com/...}
+The source code is on Github:\\\url{https://github.com/lzddzh/cs5234/tree/master/miniProject}
 
 
  
@@ -96,24 +97,18 @@ In our practise, we find the following 3 features of the text has great impact o
 To understand a book or a paragraph, first you have to understand the words in the book. Obviously books written with huge vocabulary is more difficult than books written in a small set of vocabulary. So here we will count the distinct words in a book.
 \newline
 \newline
-Difficult words will reduce the readability of a book. The difficult book should have higher average word difficulty. But in our practice, the average word difficulty is not so important to the book readability, however the variance of the word difficulty in a book have good implies of the book's readability. The reason is the distribution of the words in a book is a "triangle shape". In Figure 1, we have shown all the words in a level 6 book distributing on number of syllables. Since a word with more syllables are more difficult\cite{fry}. We can see that the most easy words appeared more times in the book. 
+Difficult words will reduce the readability of a book. The difficult book should have higher average word difficulty. On the other hand, a word with more syllables is usually harder than the less one \cite{fry}. Thus counting the number of syllables of all the words and further doing some analysis would reflect the difficulty of the words. We use a simple way
+to estimate the number of syllables and then calculate the variance of such data streamingly as the evaluation of the words' difficulty.
 \newline
 \newline
-The longer the sentence is, the more difficult for reader to understand it. When we reading we are more likely to focus on a continues words and once we meet a full stop or a comma then we sum up all the read words and try to understand them, so as the sentence become longer, you will have more information to process at the full stop or comma.
+The longer the sentence is, the more difficult for reader to understand it. When we reading we are more likely to focus on continuous words and once we meet a full stop or a comma then we sum up all the read words and try to understand them, so as the sentence become longer, you will have more information to process at the full stop or comma.
 \newline
 \newline
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{wordsDistribution} 
-\caption{Words in a level 6 book distributing on syllables number}
-\end{center}
-\end{figure}
-
-Previous researches also shows these criteria has good estimation of the book's readability. For example \cite{flesch}\cite{klare}\cite{chall} used the average sentence length and the average length in syllables to measure the readability of text. 
+Previous researches also shows these criteria has good estimation of the book's readability. For example \cite{chall}\cite{flesch}\cite{klare} used the average sentence length and the average length in syllables to measure the readability of text. 
 
 \section{Data Set}
 We have two part of data set: One is from a series book which contains 49 books with readability level labelled by publisher; Another is a huge e-book set from project Gutenberg without readability labelled.
+And for comparing the readability, we also test a REALLY hard book in addition.
 \subsection{Oxford Bookworms Series Book}
 The data set we use is the Oxford Bookworms series books\cite{oxford}, which consists of 49 books written in 6 level of readability. These books are re-written by Oxford ELT to fit different readers with reading ability. Below we list the books with their readability level.
 \begin{table}[H]
@@ -195,7 +190,7 @@ We get all the books in plain text stored in .txt format file from the Internet.
 Gutenberg is a project that offers a great number of free e-books for research use. These books are all real world books taken from free epub books, free kindle books. Since most of the books were previously published by bona fide publishers, and were digitized and proofread by thousands of volunteers, the quality of the books are ensured.
 \newline
 \newline
-In our project, we downloaded 1255 books from Gutenberg website, which is 519.5MB in total. In later section we will test our algorithm on this huge data set to see the speed and space performance of our algorithm.
+In our project, we downloaded 1254 books from Gutenberg website, which is 519.5MB in total. In later section we will test our algorithm on this huge data set to see the speed and space performance of our algorithm.
 
 \subsection{Special Case}
 Except for above data set, we also tested our algorithm on an special case, in which the book is extremely difficult. The book we choose is \textit{Wealth of Nation}\cite{wealth}.
@@ -214,17 +209,18 @@ Except for above data set, we also tested our algorithm on an special case, in w
 			$L = \frac{s}{\textrm{number of full stops}}$.
 	\end{enumerate}
 	
-	We combine these 3 criteria as one $R$ by giving each some proportion and sum them together, but notice that the weight of $D$, $W$ and $L$ does not represents their importance. For example, $D$ is about 100 bigger than $L$ and 1000 bigger than $W$.
+	We combine these $3$ criteria into a weighted sum $R$. Note that these criteria have very different scales, thus we choose such coefficients
+	making all $3$ values fit into $[10, 100]$.
 	\[R = 0.02D + 5W + L.\]
 
 	To gain the three criteria $D$, $W$ and $L$, we designed three separate parts of our streaming algorithm, which grade on a text stream and
 	reflect the corresponding criteria.
 
-	\subsection{Distinct words counting}
+\subsection{Distinct words counting}
 		For the first criteria, we only need to count the distinct words in a book. Or equivalently, count the distinct elements
 		in a multi-set as a stream. There are lots of algorithms for such problem, e.g. \textit{Hit Counting}, \textit{Adaptive Sampling},
-		\textit{Min Count} and \textit{HyperLogLog}.
-		The algorithm we used is the well-known HyperLogLog algorithm\cite{hyper}, which is an improved
+		\textit{Min Count} \cite{cosma} and \textit{HyperLogLog} \cite{hyper}.
+		The algorithm we used is the well-known HyperLogLog algorithm, which is an improved
 		minimum-count algorithm.
 \newline
 \newline
@@ -245,30 +241,36 @@ Except for above data set, we also tested our algorithm on an special case, in w
 		divide all the numbers into $m$ different groups, calculate the answer for each group, and finally take the harmonic mean.
 	\newline
 	\newline
-		By analysis \{{\color{red}ref needed here!!!}\}, we also need to normalize our result with coefficient
+		By analysis \cite{hyper}, we also need to normalize our result with coefficient
 		\[ \alpha_m = ( m \int_0^\infty (\log_2(\frac{2 + u}{1 + u}))^m du)^{-1}. \]
 
 		The theoretic relative error of this method is $\pm \frac{1.04}{\sqrt{m}}$. See the implementation section and result section for more detials.
 
 	\subsection{Variance method according to syllables}
 		For the second one, basically, we want to do something with the word's syllables. The idea behind is that
-		if most words are just one-syllable words, with high probability we could say that it is an easy-reading book.
+		if most words are just one-syllable or two-syllable words, with high probability we could say that it is an easy-reading book.
 	\newline
 	\newline
 		So, firstly we need to calculate the number of syllables of a word. Basic rules for syllabication could help us. However as we known,
 		there are many exceptions in the real English world. Such calculation can't be accuracy. Thus we did something much simpler but more
 		effective. We simply count the number of vowels as an estimation of the number of syllables.
-		Now, for a stream of words, we could give each word a score according to that estimation of the syllables.
 	\newline
 	\newline
-		Naturally, the average of all these socres may give us a good evaluation. But in the practice, just take the mean of these scores is not
-		a good measure, as many difficult books have lower evaluation than easy books according to average value.
+		Naturally, the average of all these numbers may give us a good evaluation. But in the practice, just take the mean of these numbers is not
+		a good measure.
 		The reason is that, even in the difficult book, most
-		words are just one-syllable or two-syllable words such as ``a", ``the" and ``of". There isn't a big enough gap between easy one and
-		difficult one.
-	\newline
-	\newline
+		words are just one-syllable or two-syllable words such as ``a", ``the" and ``of" as the Figure 1 shows.
+		There isn't a big enough gap between easy book and difficult book.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{wordsDistribution} 
+\caption{Words in a level 6 book distributing on syllables number}
+\end{center}
+\end{figure}
+
 		However, the variance does. Different from the mean, just a few multiple-syllable words can make nonnegligible contribution to the variance.
+		Thus we use the variance of the number of syllables as our evaluation of the words' difficulty.
 	\newline
 	\newline
 		By the definition, the variance can not be calculated streamingly using limited space. But we can do some tricks as following (let
@@ -290,12 +292,12 @@ Except for above data set, we also tested our algorithm on an special case, in w
 		some simple ways to solve this problem. The most effective and surprising one is that just take the average length of each sentences.
 	\newline
 	\newline
-		Although, length is very different from difficulty, but it is a good approximate measure. As we know, complicated sentences always
+		Although, length is very different from difficulty, but it is a good approximate measure \cite{chall}. As we know, complicated sentences always
 		have subordinate clauses and much more decorated words. Note that length here means the number of words, e.g. $len($``We are students."
 		$) = 3$.
 	\newline
 	\newline
-		The algorithm is relatively simple. Just maintain two sketches, one for words, another one for full stop. Thus such algorithm runs
+		The algorithm is relatively simple. Just maintain two sketches, one for words, another one for full stops. Thus such algorithm runs
 		in linear time and constant space.
 
 %----------------------------------------------------------------------------------------
@@ -325,6 +327,9 @@ Except for above data set, we also tested our algorithm on an special case, in w
 			The time complexity and space complexity of this sub-algorithm are $O(s \log m)$ and $O(m)$. Following is the pseudocode.
 
                 \begin{center}
+\floatname{algorithm}{Algorithm}
+\begin{algorithm}[H]
+\caption{Count Distinct Words}
                 \begin{algorithmic}
                         \Function{HyperLogLog\_Sketch}{$\mathcal{M}$ : a stream of words from $\mathcal{W}$}
                                 \State $M[0], \cdots, M[m - 1]\gets 0$
@@ -337,20 +342,25 @@ Except for above data set, we also tested our algorithm on an special case, in w
                                 \State \Return $E \gets \alpha_m m^2 \cdot (\sum\limits^m_{j = 1} 2^{-M[j]})^{-1}$
                         \EndFunction
                 \end{algorithmic}
+\end{algorithm}
                 \end{center}
         \subsection{Variance method according to syllables}
 			Let $r : \mathcal{W} \rightarrow \mathbb{N}$ be the function which could calculate the number of syllables of words in $\mathcal{W}$.
 			And we need maintain three counters: one for the number of words, one for the linear sum of syllables, and the last one for the
 			square sum of syllables.
-
+\newline
+\newline
 			But how can we implement such $r$? Roughly, we estimate such number by counting the number of vowels.
 			Since according to the basic syllabication rule, each syllable should consist of at least one vowel. But we still implement some
 			other exceptional rules, including the tailing voiceless consonant, character ``r" following another vowel,
 			and two consecutive vowels. If you are really interested in, please refer to our code implementation.
-
+\newline
+\newline
 			The time complexity and space complexity of this sub-algorithm are $O(s)$ and $O(1)$. Following is the pseudocode.
-
                 \begin{center}
+\floatname{algorithm}{Algorithm}
+\begin{algorithm}[H]
+\caption{Variance of syllables}
                 \begin{algorithmic}
                         \Function{Variance\_Sketch}{$\mathcal{M}$ : a stream of words from $\mathcal{W}$}
                                 \State $expect, square, n \gets 0$
@@ -363,11 +373,15 @@ Except for above data set, we also tested our algorithm on an special case, in w
                                 \State \Return $E \gets \frac{square}{n} - (\frac{expect}{n})^2$
                         \EndFunction
                 \end{algorithmic}
+\end{algorithm}
                 \end{center}
-        \subsection{Average length of sentenses}
+        \subsection{Average length of sentences}
 			The implementation of this sub-algorithm is quite easy, just maintain the number of words and the number of full stop.
 			The time complexity and space complexity of this sub-algorithm are $O(s)$ and $O(1)$. Following is the pseudocode.
                 \begin{center}
+\floatname{algorithm}{Algorithm}
+\begin{algorithm}[H]
+\caption{Average sentence length}
                 \begin{algorithmic}
                         \Function{Length\_Sketch}{$\mathcal{M}$ : a stream of words from $\mathcal{W}$}
                                 \State $word, stop \gets 0$
@@ -383,6 +397,7 @@ Except for above data set, we also tested our algorithm on an special case, in w
                                 \State \Return $E \gets \frac{word}{stop}$
                         \EndFunction
                 \end{algorithmic}
+\end{algorithm}
                 \end{center}
 
 
@@ -390,9 +405,9 @@ Except for above data set, we also tested our algorithm on an special case, in w
 %	SECTION 5
 %----------------------------------------------------------------------------------------
 \section{Results}
-We have tested our program on two data sets. While one is labelled with readability level, another does not but contains a big number of books. We tested our accuracy performance by using the Oxford Bookworms data set, while the time and space performance is tested by the Gutenberg data set.
+We have tested our program on two data sets. While one is labelled with authorized readability level \cite{oxford}, another does not but contains a big number of books. We tested our accuracy performance by using the Oxford Bookworms data set, while the time and space performance is tested by the Gutenberg data set.
 \subsection{Accuracy Performance}
-Our algorithm has achieved good estimation of the readability of the books. We applied our algorithm on the Oxford bookworms series books as Figure 2 shows. In the graph, books in y-axis is sorted by their level, so the lower books are more difficult to read. We can see that our $R$ value is growing as the books become more difficult.
+Our algorithm has achieved good estimation of the readability of the books. We applied our algorithm on the Oxford bookworms series books as Figure 2 shows. In the graph, books in y-axis is sorted by their level, so the higher books are more difficult to read. We can see that our $R$ values are almost monotone.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=1\textwidth]{50books} 
@@ -403,7 +418,7 @@ Our algorithm has achieved good estimation of the readability of the books. We a
 Except for Oxford bookworms series book, we have tested other special cases, the book \textit{Wealth of Nation}, which is known to all that this book is very very difficult. We can see is R value in Figure 2, which is much higher than all other books. Another special case is book with long sentence but is not really hard: Charles Dickens's book. We can see his book ranks at the middle of all the books.
 
 \subsection{Space Performance}
-We test the space performance by comparing our streaming implementation and non-streaming implementation. We run both of them on the Gutenberg data set. The non-streaming implementation used a C++ STL container \textit{set} to count the distinct value. To test the space of a running program used is not easy. However, not like the time cost, the calculated theoretical space cost is usually consists with the real cost. Here we know the struct of STL container \textit{set} and the data it processed, so we wrote a script to calculate the space overhead of \textit{set}, the value in the non-streaming row is the result.
+We test the space performance by comparing our streaming implementation and non-streaming implementation. We run both of them on the Gutenberg data set. The non-streaming implementation used a C++ STL container \textit{set} to count the distinct value. To test the space of a running program used is not easy. However, the theoretical space cost is usually consistent with the real cost. Here we know the structure of STL container \textit{set} and the data it processed, so we wrote a script to calculate the space overhead of \textit{set}, the value in the non-streaming row is the result.
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{ | m{10em} | m{5em}| m{10em} | m{5em} | m{5em} |} 
@@ -424,9 +439,9 @@ Non-Stream & - & 387347 bytes & 100.0\% \\
 \end{center}
 \caption{Space and Accuracy in Hyper Log Log} \label{tab: testtime}
 \end{table}
-Table 2 shows the result of streaming and non-streaming methods running on 1155 books. We can see that using the streaming method, only 4096 bytes can reach 99.4\% of the full accuracy. Compare to the non-streaming cost is a big improvement. In our practice, use $m = 16$ is accurate enough.
+Table 2 shows the result of streaming and non-streaming methods running on 1254 books. We can see that using the streaming method, only 4096 bytes can reach 99.4\% of the full accuracy. Comparing to the non-streaming cost, it is a big improvement. In our practice, using $m = 16$ is accurate enough.
 \subsection{Time Performance}
-On the test data set Gutenberg 1155 books, our streaming method reduce the total processing time by 26.07\%. The time is mainly saved by Hyper Log Log algorithm.
+On the test data set Gutenberg 1254 books, our streaming method reduce the total processing time by 26.07\%. The time is mainly saved by Hyper Log Log algorithm.
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{ | m{10em} | m{10em}| m{10em} | } 
@@ -441,17 +456,27 @@ Processing Time & 93.00 second & 125.81 second \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Time Spend on 1155 books (Data 519.5MB, m = 16)} \label{tab: testtime}
+\caption{Time Spend on 1254 books (Data 519.5MB, m = 16)} \label{tab: testtime}
 \end{table}
 \section{Discussion}
-Overall, our project succeed in reflect the readability of a given book by streaming method. Our project shows a great example of applying streaming method to gain more space and time efficiency. And also we should realize this is done by sacrificing certain accuracy. So in reality, not every problem can be solved by streaming. Only those are not sensitive to accuracy and with limited space resources fits the streaming algorithm.
+Overall, our project succeed in reflecting the readability of a given book by streaming method. Our project shows a great example of applying streaming method to gain more space and time efficiency. And also we should realize this is done by sacrificing certain accuracy.
 \newline
 \newline
-Through this project, we also realized convert a solution to streaming method is not easy. There may have no existing streaming method for your problem. Or there may have many different streaming methods for your problem, but you still have to carefully choose them. Or your problem is totally not suitable for streaming. A defect of our project we thought is that although we reduce the space cost greatly, it turns out it may not be so useful. Because modern PC can easily process an arbitrary book with non-streaming method since a book contains only few data. In section 6.2, even the non-streaming method use much more space than streaming method, the overhead still not exceeds 1 MB. And even if you store all the 519MB to memory, it is not a big deal to modern PC. Therefore, thinking for apply a streaming algorithm to a certain system should be careful.
+In real world, not all problem can be solved by streaming. Only those are not sensitive to accuracy and with limited space resources fits the streaming algorithm.
+There is a very large gap between non-streaming algorithm and streaming one. They focus on very difficult goals. For a specific problem, designing such a streaming algorithm is not that easy. Even if you successfully design one, you still have to carefully treat its trade-off between correctness and memory-saving.
 \newline
 \newline
-We think this is also true for other methods we learned from this class: sub-linear, cache, parallel. We can not streaming or parallel every thing. They are just fit for some certain problem. But once the problem matches the algorithm, the result will be fantastic.
-
+A defect of our project is that although we reduce the space cost greatly, it turns out that it may not be so useful. Because modern PC can easily process an arbitrary book with non-streaming method since a book contains only few data.
+Streaming algorithm is certainly powerful for text-processing, but restricting to our task, traditional method also works.
+The reason is that even if you have thousands of book to be processed, you only need to memorize one book. When you finished one book,
+you could release the memory and then be ready for the next one. Thus even we have a data set with 500 MB size,
+the traditional method only need about 1 MB memory. At some point of view, traditional method also be made into partly streaming as above discussed.
+However, our algorithm still shows much much better performance. Thus if you have one book with about 100 MB size,
+the traditional one will not be so acceptable.
+\newline
+\newline
+As data volumes grow nowadays, the algorithms we learnt from this class become much more powerful on large data set. Designing an algorithm
+balance between the space consumption and correctness is really fantastic.
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
